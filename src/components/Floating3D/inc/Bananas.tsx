@@ -6,6 +6,7 @@ import { useGLTF, Detailed, Environment } from '@react-three/drei'
 // https://github.com/pmndrs/react-postprocessing
 // https://github.com/vanruesc/postprocessing
 import { EffectComposer, DepthOfField } from '@react-three/postprocessing'
+import { Perf } from 'r3f-perf'
 
 
 function Banana({ index, z, speed } : any) {
@@ -61,6 +62,8 @@ export default function Bananas({ speed = 1, count = 80, depth = 80, easing = (x
   return (
     // No need for antialias (faster), dpr clamps the resolution to 1.5 (also faster than full resolution)
     <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.01, far: depth + 15 }}>
+
+      <Perf position="bottom-left"/>
       <color attach="background" args={['#ffbf40']} />
       <spotLight position={[10, 20, 10]} penumbra={1} intensity={3} color="orange" />
       {/* Using cubic easing here to spread out objects a little more interestingly, i wanted a sole big object up front ... */}

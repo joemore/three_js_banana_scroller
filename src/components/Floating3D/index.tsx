@@ -1,5 +1,6 @@
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import Overlay from './inc/Overlay'
+
 
 
 import Bananas from './inc/Bananas'
@@ -16,7 +17,11 @@ export function Floating3D( props : componentOverlayProps) {
   const { name, picture, profile, subtitle } = props
   return (
     <>
+
+      
+
       <Suspense fallback={null}>
+        
         <Bananas />
         {/* <FadeIn /> */}
       </Suspense>
