@@ -37,6 +37,18 @@ export const Radio = (props: radioProps) => {
         />
         Astronaut
       </label>
+
+      <label className="mb-2">
+        <input
+          type="radio"
+          name="radio-checkbox"
+          value="love"
+          className="mr-2"
+          checked={selectedValue === 'love'}
+          onChange={handleOptionChange}
+        />
+        Love
+      </label>
     </div>
   );
 };
