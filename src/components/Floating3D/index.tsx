@@ -5,6 +5,7 @@ import Overlay from './inc/Overlay'
 
 import Bananas from './inc/Bananas'
 import Astronauts from './inc/Astronaut'
+import Loves from './inc/Love'
 
 export interface componentOverlayProps {
   name : string
@@ -22,18 +23,25 @@ export function Floating3D( props : componentOverlayProps) {
   function changeBackground(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedValue(event.target.value)
   }
+
+  function renderBackground() {
+    switch (selectedValue) {
+      case 'astronaut':
+        return <Astronauts />;
+      case 'love':
+        return <Loves />
+      default:
+        return <Bananas />
+    }
+  }
+
   return (
     <>
 
       
 
       <Suspense fallback={null}>
-        
-        {
-          selectedValue === 'astronaut' ?
-          <Astronauts />:
-          <Bananas />
-        }
+        {renderBackground()}
       </Suspense>
       <Overlay 
         name={name}
