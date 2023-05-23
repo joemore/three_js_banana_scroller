@@ -9,7 +9,7 @@ import { EffectComposer, DepthOfField } from '@react-three/postprocessing'
 import { Perf } from 'r3f-perf'
 
 /**
- * 3D model is free, non commercial
+ * 3D model is free, commercial-able
  * "PUMPING HEART MODEL" (https://skfb.ly/6RIR7) by omarelone is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
  * changes were made that is creating 3 version of the model (high vertices, medium and low) and also add material color
  * @param param0 
