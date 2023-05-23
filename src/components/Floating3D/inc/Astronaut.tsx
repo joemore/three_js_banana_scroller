@@ -53,13 +53,13 @@ function Astronaut({ index, z, speed } : any) {
     <Detailed ref={ref} distances={[0, 65, 80]}>
       {
         [1,2,3].map(idx => (
-          <group key={idx} ref={ref} scale={2}>
-            <mesh geometry={nodes[`Object_200${idx}`].geometry} material={materials['Material.001']}  material-emissive="#d9f9ff" />
-            <mesh geometry={nodes[`Object_300${idx}`].geometry} material={materials['Material.002']} material-emissive="#d9f9ff" />
-            <mesh geometry={nodes[`Object_400${idx}`].geometry} material={materials['Material.003']} material-emissive="#d9f9ff" />
-            <mesh geometry={nodes[`Object_500${idx}`].geometry} material={materials['Brazelet']}  material-emissive="#d9f9ff" />
-            <mesh geometry={nodes[`Object_600${idx}`].geometry} material={materials['Suit']}  material-emissive="#d9f9ff" />
-            <mesh geometry={nodes[`Object_700${idx}`].geometry} material={materials['Suit']} material-emissive="#d9f9ff" />
+          <group key={idx} ref={ref} scale={2.5}>
+            <mesh geometry={nodes[`Object_200${idx}`].geometry} material={materials['Material.001']}  />
+            <mesh geometry={nodes[`Object_300${idx}`].geometry} material={materials['Material.002']} />
+            <mesh geometry={nodes[`Object_400${idx}`].geometry} material={materials['Material.003']} />
+            <mesh geometry={nodes[`Object_500${idx}`].geometry} material={materials['Brazelet']}  />
+            <mesh geometry={nodes[`Object_600${idx}`].geometry} material={materials['Suit']}  />
+            <mesh geometry={nodes[`Object_700${idx}`].geometry} material={materials['Suit']} />
           </group>
         ))
       }
@@ -67,7 +67,7 @@ function Astronaut({ index, z, speed } : any) {
   )
 }
 
-export default function Astronauts({ speed = 1, count = 40, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
+export default function Astronauts({ speed = 1, count = 50, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
   return (
     // No need for antialias (faster), dpr clamps the resolution to 1.5 (also faster than full resolution)
     <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.01, far: depth + 15 }}>
