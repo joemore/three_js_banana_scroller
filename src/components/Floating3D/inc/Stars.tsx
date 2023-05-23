@@ -10,12 +10,12 @@ import { Perf } from 'r3f-perf'
 
 /**
  * 3D model is free, commercial-able
- * "PUMPING HEART MODEL" (https://skfb.ly/6RIR7) by omarelone is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+ * "Gold Star" (https://skfb.ly/6woS9) by Oleksandr Pelypenko is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
  * changes were made that is creating 3 version of the model (high vertices, medium and low) and also add material color
  * @param param0 
  * @returns 
  */
-function Love({ index, z, speed } : any) {
+function Star({ index, z, speed } : any) {
   const ref : any = useRef()
   // useThree gives you access to the R3F state model
   const { viewport, camera } = useThree()
@@ -25,7 +25,7 @@ function Love({ index, z, speed } : any) {
   // It can automatically handle draco and meshopt-compressed assets without you having to
   // worry about binaries and such ...
   // const { nodes, materials } : any = useGLTF('/banana-v1-transformed.glb')
-  const { scene, nodes, materials } : any = useGLTF('/love-pump.glb')
+  const { scene, nodes, materials } : any = useGLTF('/stars.glb')
   // By the time we're here the model is loaded, this is possible through React suspense
   // Local component state, it is safe to mutate because it's fixed data
   const [data] = useState({
@@ -51,7 +51,6 @@ function Love({ index, z, speed } : any) {
     // If they're too far up, set them back to the bottom
     if (data.y > height * (index === 0 ? 4 : 1)) data.y = -(height * (index === 0 ? 4 : 1))
   })
-  console.log("CEK", nodes)
   // Using drei's detailed is a nice trick to reduce the vertex count because (if only the model provide low/high vertex version!)
   // we don't need high resolution for objects in the distance. The model contains 3 decimated meshes ...
   return (
@@ -60,7 +59,7 @@ function Love({ index, z, speed } : any) {
       {
         ['', '001', '002'].map(idx => (
           <group key={idx} ref={ref} scale={0.1}>
-            <mesh geometry={nodes[`BASE_HEART_Material_#41_0${idx}`].geometry} material={materials['Material_41']}  />
+            <mesh geometry={nodes[`Star_Gold_0${idx}`].geometry} material={materials['Gold']}  />
           </group>
         ))
       }
@@ -68,16 +67,16 @@ function Love({ index, z, speed } : any) {
   )
 }
 
-export default function Loves({ speed = 1, count = 50, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
+export default function Stars({ speed = 1, count = 50, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
   return (
     // No need for antialias (faster), dpr clamps the resolution to 1.5 (also faster than full resolution)
     <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.01, far: depth + 15 }}>
 
       <Perf position="bottom-left"/>
-      <color attach="background" args={['#fc8e86']} />
+      <color attach="background" args={['#fca986']} />
       <spotLight position={[10, 20, 10]} penumbra={1} intensity={3} color="orange" />
       {/* Using cubic easing here to spread out objects a little more interestingly, i wanted a sole big object up front ... */}
-      {Array.from({ length: count }, (_, i) => <Love key={i} index={i} z={Math.round(easing(i / count) * depth)} speed={speed} /> /* prettier-ignore */)}
+      {Array.from({ length: count }, (_, i) => <Star key={i} index={i} z={Math.round(easing(i / count) * depth)} speed={speed} /> /* prettier-ignore */)}
       <Environment preset="sunset" />
       {/* Multisampling (MSAA) is WebGL2 antialeasing, we don't need it (faster) */}
       <EffectComposer multisampling={0}>
