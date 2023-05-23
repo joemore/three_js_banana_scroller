@@ -8,7 +8,13 @@ import { useGLTF, Detailed, Environment } from '@react-three/drei'
 import { EffectComposer, DepthOfField } from '@react-three/postprocessing'
 import { Perf } from 'r3f-perf'
 
-
+/**
+ * 3D model is free, non commercial
+ * "3D Cute Astronaut made in Blender" (https://skfb.ly/onVW7) by Naomifz is licensed under CC Attribution-NonCommercial-NoDerivs (http://creativecommons.org/licenses/by-nc-nd/4.0/).
+ * changes were made that is creating 3 version of the model (high vertices, medium and low) and also add material color
+ * @param param0 
+ * @returns 
+ */
 function Astronaut({ index, z, speed } : any) {
   const ref : any = useRef()
   // useThree gives you access to the R3F state model
@@ -19,7 +25,7 @@ function Astronaut({ index, z, speed } : any) {
   // It can automatically handle draco and meshopt-compressed assets without you having to
   // worry about binaries and such ...
   // const { nodes, materials } : any = useGLTF('/banana-v1-transformed.glb')
-  const { scene, nodes, materials } : any = useGLTF('/cute_astronaut-decimated.glb')
+  const { scene, nodes, materials } : any = useGLTF('/cute_astronaut.glb')
   // By the time we're here the model is loaded, this is possible through React suspense
   // Local component state, it is safe to mutate because it's fixed data
   const [data] = useState({
@@ -52,13 +58,14 @@ function Astronaut({ index, z, speed } : any) {
     // @ts-ignore
     <Detailed ref={ref} distances={[0, 65, 80]}>
       {
-        [1,2,3].map(idx => (
+        [1, 2, 3].map(idx => (
           <group key={idx} ref={ref} scale={2.5}>
             <mesh geometry={nodes[`Object_200${idx}`].geometry} material={materials['Material.001']}  />
             <mesh geometry={nodes[`Object_300${idx}`].geometry} material={materials['Material.002']} />
             <mesh geometry={nodes[`Object_400${idx}`].geometry} material={materials['Material.003']} />
-            <mesh geometry={nodes[`Object_500${idx}`].geometry} material={materials['Brazelet']}  />
-            <mesh geometry={nodes[`Object_600${idx}`].geometry} material={materials['Suit']}  />
+            <mesh geometry={nodes[`Object_500${idx}`].geometry} material={materials['Brazelet']} />
+            {/* material-emissive="#DICCCC" */}
+            <mesh geometry={nodes[`Object_600${idx}`].geometry} material={materials['Suit']} material-emissive="#B4AB95"  />
             <mesh geometry={nodes[`Object_700${idx}`].geometry} material={materials['Suit']} />
           </group>
         ))
@@ -70,7 +77,7 @@ function Astronaut({ index, z, speed } : any) {
 export default function Astronauts({ speed = 1, count = 50, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
   return (
     // No need for antialias (faster), dpr clamps the resolution to 1.5 (also faster than full resolution)
-    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.01, far: depth + 15 }}>
+    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 1.2, far: depth + 15 }}>
 
       <Perf position="bottom-left"/>
       <color attach="background" args={['skyblue']} />
