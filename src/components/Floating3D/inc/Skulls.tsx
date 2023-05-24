@@ -10,12 +10,12 @@ import { Perf } from 'r3f-perf'
 
 /**
  * 3D model is free, commercial-able
- * "Gold Star" (https://skfb.ly/6woS9) by Oleksandr Pelypenko is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+ * "Puppet Skull" (https://skfb.ly/o9MJ9) by MrPuppet is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
  * changes were made that is creating 3 version of the model (high vertices, medium and low) and also add material color
  * @param param0 
  * @returns 
  */
-function Star({ index, z, speed } : any) {
+function Skull({ index, z, speed } : any) {
   const ref : any = useRef()
   // useThree gives you access to the R3F state model
   const { viewport, camera } = useThree()
@@ -25,7 +25,7 @@ function Star({ index, z, speed } : any) {
   // It can automatically handle draco and meshopt-compressed assets without you having to
   // worry about binaries and such ...
   // const { nodes, materials } : any = useGLTF('/banana-v1-transformed.glb')
-  const { scene, nodes, materials } : any = useGLTF('/stars.glb')
+  const { scene, nodes, materials } : any = useGLTF('/puppet_skull.glb')
   // By the time we're here the model is loaded, this is possible through React suspense
   // Local component state, it is safe to mutate because it's fixed data
   const [data] = useState({
@@ -58,8 +58,9 @@ function Star({ index, z, speed } : any) {
     <Detailed ref={ref} distances={[0, 65, 80]}>
       {
         ['', '001', '002'].map(idx => (
-          <group key={idx} ref={ref} scale={0.1}>
-            <mesh geometry={nodes[`Star_Gold_0${idx}`].geometry} material={materials['Gold']}  />
+          <group key={idx} ref={ref} scale={0.7}>
+            <mesh geometry={nodes[`pCube2_lambert2_0${idx}`].geometry} material={materials['lambert2']}  />
+            <mesh geometry={nodes[`pCube2_lambert3_0${idx}`].geometry} material={materials['lambert3']}  />
           </group>
         ))
       }
@@ -67,16 +68,16 @@ function Star({ index, z, speed } : any) {
   )
 }
 
-export default function Stars({ speed = 1, count = 60, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
+export default function Skulls({ speed = 1, count = 60, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
   return (
     // No need for antialias (faster), dpr clamps the resolution to 1.5 (also faster than full resolution)
-    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.01, far: depth + 15 }}>
+    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 1, far: depth + 15 }}>
 
       <Perf position="bottom-left"/>
-      <color attach="background" args={['#fca986']} />
+      <color attach="background" args={['#bbb1c7']} />
       <spotLight position={[10, 20, 10]} penumbra={1} intensity={3} color="orange" />
       {/* Using cubic easing here to spread out objects a little more interestingly, i wanted a sole big object up front ... */}
-      {Array.from({ length: count }, (_, i) => <Star key={i} index={i} z={Math.round(easing(i / count) * depth)} speed={speed} /> /* prettier-ignore */)}
+      {Array.from({ length: count }, (_, i) => <Skull key={i} index={i} z={Math.round(easing(i / count) * depth)} speed={speed} /> /* prettier-ignore */)}
       <Environment preset="sunset" />
       {/* Multisampling (MSAA) is WebGL2 antialeasing, we don't need it (faster) */}
       <EffectComposer multisampling={0}>
