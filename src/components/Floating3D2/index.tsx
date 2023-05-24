@@ -11,41 +11,38 @@ export interface componentOverlayProps {
   onChangeBackground : (e: React.ChangeEvent<HTMLInputElement>) => void
 } 
 
+const speed = 1.5;
+
+// Key must match the value of `/profile-backgrounds/${key}/object.glb`
 const layouts : any = {
   "bananas": {
-    GLTFSrc: "/banana-v1-transformed.glb",
-    speed: 1,
+    speed: speed,
     scale: 1,
     color: "#ffbf40"
   },
   "stars": {
-    GLTFSrc: "/stars.glb",
-    speed: 0.5,
-    scale: 0.05,
+    speed: speed,
+    scale: 0.04,
     color: "#ae4cdb"
   },
   "hearts": {
-    GLTFSrc: "/love-pump.glb",
-    speed: 0.7,
+    speed: speed,
     scale: 0.05,
     color: "#b94949"
   },
   "skulls"  : {
-    GLTFSrc: "/puppet_skull.glb",
-    speed: 0.5,
-    scale: 0.4,
+    speed: speed,
+    scale: 0.35,
     color: "#303030"
   },
   "bullets" : {
-    GLTFSrc: "/bullet.gltf",
-    speed: 0.5,
-    scale: 2,
+    speed: speed,
+    scale: 1.6,
     color: "#223122"
   },
   "robots" : {
-    GLTFSrc: "/robot.glb",
-    speed: 0.5,
-    scale: 0.8,
+    speed: speed,
+    scale: 0.6,
     color: "#ffbf40"
   }
 
@@ -60,15 +57,14 @@ export function Floating3D2( props : componentOverlayProps) {
     setSelectedValue(event.target.value)
   }
 
-  
-  const { GLTFSrc, speed, scale, color } = layouts[selectedValue]
+  const { speed, scale, color } = layouts[selectedValue]
 
   return (
     <>
       
       <Suspense fallback={null}>
         <Layout 
-          GLTFSrc={GLTFSrc}
+          objectName={selectedValue}
           speed={speed}
           color={color}
           scale={scale}
@@ -81,11 +77,6 @@ export function Floating3D2( props : componentOverlayProps) {
         subtitle={subtitle}
         onChangeBackground={changeBackground}
       />
-
-      {/* Speed Adjust bar */}
-      {/* <div className='absolute right-6 top-1/2 z-20' style={{transform: `rotate(90deg) translate3d(50%, 0, 0)`,transformOrigin: `100% 50%`}}>
-        <input type="range" min="0" max="10" value={speed} step="1" onChange={(e : any) => set(e.target.value)} />
-      </div> */}
     </>
   )
 }
