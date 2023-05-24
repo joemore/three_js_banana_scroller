@@ -9,13 +9,13 @@ import { EffectComposer, DepthOfField } from '@react-three/postprocessing'
 import { Perf } from 'r3f-perf'
 
 /**
- * 3D model is free, non commercial
- * "3D Cute Astronaut made in Blender" (https://skfb.ly/onVW7) by Naomifz is licensed under CC Attribution-NonCommercial-NoDerivs (http://creativecommons.org/licenses/by-nc-nd/4.0/).
+ * 3D model is free, commercial-able
+ * "robot emoji (Apple)" (https://skfb.ly/6VKXM) by Yokarra is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
  * changes were made that is creating 3 version of the model (high vertices, medium and low) and also add material color
  * @param param0 
  * @returns 
  */
-function Astronaut({ index, z, speed } : any) {
+function Robot({ index, z, speed } : any) {
   const ref : any = useRef()
   // useThree gives you access to the R3F state model
   const { viewport, camera } = useThree()
@@ -25,7 +25,7 @@ function Astronaut({ index, z, speed } : any) {
   // It can automatically handle draco and meshopt-compressed assets without you having to
   // worry about binaries and such ...
   // const { nodes, materials } : any = useGLTF('/banana-v1-transformed.glb')
-  const { scene, nodes, materials } : any = useGLTF('/cute-astronaut-trim.glb')
+  const { scene, nodes, materials } : any = useGLTF('/robot.glb')
   // By the time we're here the model is loaded, this is possible through React suspense
   // Local component state, it is safe to mutate because it's fixed data
   const [data] = useState({
@@ -51,39 +51,46 @@ function Astronaut({ index, z, speed } : any) {
     // If they're too far up, set them back to the bottom
     if (data.y > height * (index === 0 ? 4 : 1)) data.y = -(height * (index === 0 ? 4 : 1))
   })
-
   // Using drei's detailed is a nice trick to reduce the vertex count because (if only the model provide low/high vertex version!)
   // we don't need high resolution for objects in the distance. The model contains 3 decimated meshes ...
   return (
     // @ts-ignore
     <Detailed ref={ref} distances={[0, 65, 80]}>
       {
-        [1, 2, 3].map(idx => (
-          <group key={idx} ref={ref} scale={2.5}>
-            <mesh geometry={nodes[`Object_200${idx}`].geometry} material={materials['Material.001']}  />
-            <mesh geometry={nodes[`Object_300${idx}`].geometry} material={materials['Material.002']} />
-            <mesh geometry={nodes[`Object_400${idx}`].geometry} material={materials['Material.003']} />
-            <mesh geometry={nodes[`Object_500${idx}`].geometry} material={materials['Brazelet']} />
-            {/* material-emissive="#DICCCC" */}
-            <mesh geometry={nodes[`Object_600${idx}`].geometry} material={materials['Suit']} material-emissive="#B4AB95"  />
-            <mesh geometry={nodes[`Object_700${idx}`].geometry} material={materials['Suit']} />
-          </group>
+        ['', '001', '002'].map(idx => (
+          <group key={idx} ref={ref} scale={1.1}>
+            {
+              nodes[`GLTF_SceneRootNode${idx}`].children.map((gsr: THREE.Object3D, idxn: number) => (
+                <group
+                  key={idxn}
+                  position={gsr.position}
+                  scale={gsr.scale}
+                  rotation={gsr.rotation}
+                >
+                  { gsr.children[0] instanceof THREE.Mesh ?
+                    <mesh geometry={gsr.children[0].geometry} material={gsr.children[0].material}  />
+                    : <></>
+                  }
+                </group>
+
+              ))
+            }</group>
         ))
       }
     </Detailed>
   )
 }
 
-export default function Astronauts({ speed = 1, count = 50, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
+export default function Robots({ speed = 1, count = 60, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
   return (
     // No need for antialias (faster), dpr clamps the resolution to 1.5 (also faster than full resolution)
-    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 1.2, far: depth + 15 }}>
+    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 1, far: depth + 15 }}>
 
       <Perf position="bottom-left"/>
-      <color attach="background" args={['skyblue']} />
+      <color attach="background" args={['#97c7a4']} />
       <spotLight position={[10, 20, 10]} penumbra={1} intensity={3} color="orange" />
       {/* Using cubic easing here to spread out objects a little more interestingly, i wanted a sole big object up front ... */}
-      {Array.from({ length: count }, (_, i) => <Astronaut key={i} index={i} z={Math.round(easing(i / count) * depth)} speed={speed} /> /* prettier-ignore */)}
+      {Array.from({ length: count }, (_, i) => <Robot key={i} index={i} z={Math.round(easing(i / count) * depth)} speed={speed} /> /* prettier-ignore */)}
       <Environment preset="sunset" />
       {/* Multisampling (MSAA) is WebGL2 antialeasing, we don't need it (faster) */}
       <EffectComposer multisampling={0}>

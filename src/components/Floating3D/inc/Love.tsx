@@ -51,7 +51,6 @@ function Love({ index, z, speed } : any) {
     // If they're too far up, set them back to the bottom
     if (data.y > height * (index === 0 ? 4 : 1)) data.y = -(height * (index === 0 ? 4 : 1))
   })
-  console.log("CEK", nodes)
   // Using drei's detailed is a nice trick to reduce the vertex count because (if only the model provide low/high vertex version!)
   // we don't need high resolution for objects in the distance. The model contains 3 decimated meshes ...
   return (
@@ -68,10 +67,10 @@ function Love({ index, z, speed } : any) {
   )
 }
 
-export default function Loves({ speed = 1, count = 50, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
+export default function Loves({ speed = 1, count = 60, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
   return (
     // No need for antialias (faster), dpr clamps the resolution to 1.5 (also faster than full resolution)
-    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.01, far: depth + 15 }}>
+    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.1, far: depth + 15 }}>
 
       <Perf position="bottom-left"/>
       <color attach="background" args={['#fc8e86']} />

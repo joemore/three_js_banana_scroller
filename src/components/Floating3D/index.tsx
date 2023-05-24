@@ -7,6 +7,9 @@ import Bananas from './inc/Bananas'
 import Astronauts from './inc/Astronaut'
 import Loves from './inc/Love'
 import Stars from './inc/Stars'
+import Skulls from './inc/Skulls'
+import Bullets from './inc/Bullet'
+import Robots from './inc/Robot'
 
 export interface componentOverlayProps {
   name : string
@@ -27,12 +30,16 @@ export function Floating3D( props : componentOverlayProps) {
 
   function renderBackground() {
     switch (selectedValue) {
-      case 'astronaut':
-        return <Astronauts />;
+      case 'robot':
+        return <Robots />;
       case 'love':
         return <Loves />
       case 'star':
         return <Stars />
+      case 'skull':
+        return <Skulls />
+      case 'bullet':
+        return <Bullets />
       default:
         return <Bananas />
     }

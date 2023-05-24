@@ -30,12 +30,12 @@ export const Radio = (props: radioProps) => {
         <input
           type="radio"
           name="radio-checkbox"
-          value="astronaut"
+          value="robot"
           className="mr-2"
-          checked={selectedValue === 'astronaut'}
+          checked={selectedValue === 'robot'}
           onChange={handleOptionChange}
         />
-        Astronaut
+        Robot
       </label>
 
       <label className="mb-2">
@@ -60,6 +60,30 @@ export const Radio = (props: radioProps) => {
           onChange={handleOptionChange}
         />
         Star
+      </label>
+
+      <label className="mb-2">
+        <input
+          type="radio"
+          name="radio-checkbox"
+          value="skull"
+          className="mr-2"
+          checked={selectedValue === 'skull'}
+          onChange={handleOptionChange}
+        />
+        Skull
+      </label>
+
+      <label className="mb-2">
+        <input
+          type="radio"
+          name="radio-checkbox"
+          value="bullet"
+          className="mr-2"
+          checked={selectedValue === 'bullet'}
+          onChange={handleOptionChange}
+        />
+        Bullet
       </label>
     </div>
   );

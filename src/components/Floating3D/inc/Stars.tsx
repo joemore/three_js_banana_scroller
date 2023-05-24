@@ -67,7 +67,7 @@ function Star({ index, z, speed } : any) {
   )
 }
 
-export default function Stars({ speed = 1, count = 50, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
+export default function Stars({ speed = 1, count = 60, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
   return (
     // No need for antialias (faster), dpr clamps the resolution to 1.5 (also faster than full resolution)
     <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.01, far: depth + 15 }}>
