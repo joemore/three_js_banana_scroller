@@ -25,7 +25,7 @@ function Astronaut({ index, z, speed } : any) {
   // It can automatically handle draco and meshopt-compressed assets without you having to
   // worry about binaries and such ...
   // const { nodes, materials } : any = useGLTF('/banana-v1-transformed.glb')
-  const { scene, nodes, materials } : any = useGLTF('/cute_astronaut.glb')
+  const { scene, nodes, materials } : any = useGLTF('/cute-astronaut-trim.glb')
   // By the time we're here the model is loaded, this is possible through React suspense
   // Local component state, it is safe to mutate because it's fixed data
   const [data] = useState({
