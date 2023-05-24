@@ -30,12 +30,12 @@ export const Radio = (props: radioProps) => {
         <input
           type="radio"
           name="radio-checkbox"
-          value="astronaut"
+          value="robot"
           className="mr-2"
-          checked={selectedValue === 'astronaut'}
+          checked={selectedValue === 'robot'}
           onChange={handleOptionChange}
         />
-        Astronaut
+        Robot
       </label>
 
       <label className="mb-2">
