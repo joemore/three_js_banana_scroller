@@ -6,7 +6,9 @@ import Radio from './Radio'
 export default function Overlay( props : componentOverlayProps) {
   const { name, picture, profile, subtitle, onChangeBackground } = props
   return (
-    <div className='absolute top-0 left-0 w-full h-full z-10'>
+    <div className='absolute top-0 left-0 w-full h-full z-10 text-white' style={{
+      textShadow: '1px 1px 1px rgba(0,0,0,0.9)'
+    }}>
 
 
       {/* Top Nav Bar */}
