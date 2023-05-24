@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { Floating3D2, componentOverlayProps } from '../components/Floating3D2'
 
@@ -13,7 +12,7 @@ export default function Home() {
     Sed euismod, nisl quis tincidunt aliquam, nunc nisl ultricies nunc, nec ultricies nisl nunc nec nisl.`,
     onChangeBackground: () => {return}
   }
-  return <div className="fixed top-0 bottom-0 left-0 right-0 z-10">
+  return <div className="fixed top-0 bottom-0 left-0 right-0 z-10 bg-zinc-900">
 		<Floating3D2
 			name={name}
 			picture={picture}
