@@ -1,11 +1,10 @@
 
 import { componentOverlayProps } from '..'
-import Radio from '../../Radio'
-
+import Radio from './Radio'
 
 
 export default function Overlay( props : componentOverlayProps) {
-  const { name, picture, profile, subtitle } = props
+  const { name, picture, profile, subtitle, onChangeBackground } = props
   return (
     <div className='absolute top-0 left-0 w-full h-full z-10'>
 
@@ -33,9 +32,8 @@ export default function Overlay( props : componentOverlayProps) {
         </div>
       </nav>
       
-      <div className="absolute right-16 top-1/2">
-        <div>Choose background</div>
-        <Radio onChangeBackground={props.onChangeBackground}/>
+      <div className="absolute right-2 top-1/2">
+        <Radio onChangeBackground={onChangeBackground}/>
       </div>
 
       {/* Subtitle & Profile */}

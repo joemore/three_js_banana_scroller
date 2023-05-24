@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import { Floating3D, componentOverlayProps } from '../components/Floating3D'
+import { Floating3D2, componentOverlayProps } from '../components/Floating3D2'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,7 +14,7 @@ export default function Home() {
     onChangeBackground: () => {return}
   }
   return <div className="fixed top-0 bottom-0 left-0 right-0 z-10">
-		<Floating3D
+		<Floating3D2
 			name={name}
 			picture={picture}
 			profile={profile}

@@ -1,15 +1,7 @@
 import { Suspense, useState } from 'react'
 import Overlay from './inc/Overlay'
+import Layout from './inc/Layout'
 
-
-
-import Bananas from './inc/Bananas'
-import Astronauts from './inc/Astronaut'
-import Loves from './inc/Love'
-import Stars from './inc/Stars'
-import Skulls from './inc/Skulls'
-import Bullets from './inc/Bullet'
-import Robots from './inc/Robot'
 
 export interface componentOverlayProps {
   name : string
@@ -19,39 +11,68 @@ export interface componentOverlayProps {
   onChangeBackground : (e: React.ChangeEvent<HTMLInputElement>) => void
 } 
 
-export function Floating3D( props : componentOverlayProps) {
-  // const [speed, set] = useState(2)
+const layouts : any = {
+  "bananas": {
+    GLTFSrc: "/banana-v1-transformed.glb",
+    speed: 1,
+    scale: 1,
+    color: "#ffbf40"
+  },
+  "stars": {
+    GLTFSrc: "/stars.glb",
+    speed: 0.5,
+    scale: 0.05,
+    color: "#ae4cdb"
+  },
+  "hearts": {
+    GLTFSrc: "/love-pump.glb",
+    speed: 0.7,
+    scale: 0.05,
+    color: "#b94949"
+  },
+  "skulls"  : {
+    GLTFSrc: "/puppet_skull.glb",
+    speed: 0.5,
+    scale: 0.4,
+    color: "#303030"
+  },
+  "bullets" : {
+    GLTFSrc: "/bullet.gltf",
+    speed: 0.5,
+    scale: 2,
+    color: "#223122"
+  },
+  "robots" : {
+    GLTFSrc: "/robot.glb",
+    speed: 0.5,
+    scale: 0.8,
+    color: "#ffbf40"
+  }
+
+}
+
+export function Floating3D2( props : componentOverlayProps) {
+
   const { name, picture, profile, subtitle } = props
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState('skulls');
 
   function changeBackground(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedValue(event.target.value)
   }
 
-  function renderBackground() {
-    switch (selectedValue) {
-      case 'robot':
-        return <Robots />;
-      case 'love':
-        return <Loves />
-      case 'star':
-        return <Stars />
-      case 'skull':
-        return <Skulls />
-      case 'bullet':
-        return <Bullets />
-      default:
-        return <Bananas />
-    }
-  }
+  
+  const { GLTFSrc, speed, scale, color } = layouts[selectedValue]
 
   return (
     <>
-
       
-
       <Suspense fallback={null}>
-        {renderBackground()}
+        <Layout 
+          GLTFSrc={GLTFSrc}
+          speed={speed}
+          color={color}
+          scale={scale}
+        />
       </Suspense>
       <Overlay 
         name={name}

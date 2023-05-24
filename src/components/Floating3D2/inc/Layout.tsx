@@ -8,14 +8,18 @@ import { useGLTF, Detailed, Environment } from '@react-three/drei'
 import { EffectComposer, DepthOfField } from '@react-three/postprocessing'
 import { Perf } from 'r3f-perf'
 
-/**
- * 3D model is free, commercial-able
- * "robot emoji (Apple)" (https://skfb.ly/6VKXM) by Yokarra is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
- * changes were made that is creating 3 version of the model (high vertices, medium and low) and also add material color
- * @param param0 
- * @returns 
- */
-function Robot({ index, z, speed } : any) {
+
+interface iRendererProps {
+	index: number
+	z: number
+	speed: number
+	scale: number
+	GLTFSrc: string
+}
+
+function Renderer( props : iRendererProps) {
+	const { index, z, speed, scale, GLTFSrc } = props
+	
   const ref : any = useRef()
   // useThree gives you access to the R3F state model
   const { viewport, camera } = useThree()
@@ -24,9 +28,9 @@ function Robot({ index, z, speed } : any) {
   // useGLTF is an abstraction around R3F's useLoader(GLTFLoader, url)
   // It can automatically handle draco and meshopt-compressed assets without you having to
   // worry about binaries and such ...
-  // const { nodes, materials } : any = useGLTF('/banana-v1-transformed.glb')
-  const { scene, nodes, materials } : any = useGLTF('/robot.glb')
+  const { nodes, materials } : any = useGLTF( GLTFSrc )
   // By the time we're here the model is loaded, this is possible through React suspense
+
   // Local component state, it is safe to mutate because it's fixed data
   const [data] = useState({
     // Randomly distributing the objects along the vertical
@@ -51,14 +55,43 @@ function Robot({ index, z, speed } : any) {
     // If they're too far up, set them back to the bottom
     if (data.y > height * (index === 0 ? 4 : 1)) data.y = -(height * (index === 0 ? 4 : 1))
   })
-  // Using drei's detailed is a nice trick to reduce the vertex count because (if only the model provide low/high vertex version!)
-  // we don't need high resolution for objects in the distance. The model contains 3 decimated meshes ...
-  return (
-    // @ts-ignore
-    <Detailed ref={ref} distances={[0, 65, 80]}>
-      {
-        ['', '001', '002'].map(idx => (
-          <group key={idx} ref={ref} scale={1.1}>
+
+	const RenderNodes : any = () => {
+    switch (GLTFSrc) {
+      case "/banana-v1-transformed.glb":
+        return ['banana_high', 'banana_mid', 'banana_low'].map(idx => (
+					<group key={idx} ref={ref} scale={scale}>
+						<mesh geometry={nodes[`${idx}`].geometry} material={materials[`skin`]} material-emissive="#ff9f00" />
+					</group>
+				))
+			case "/bullet.gltf":
+				return ['', '001', '002'].map(idx => (
+					<group key={idx} ref={ref} scale={scale}>
+						<mesh geometry={nodes[`v${idx}`].geometry} material={materials['bullet']}  />
+					</group>
+				))
+			case "/puppet_skull.glb":
+				return ['', '001', '002'].map(idx => (
+          <group key={idx} ref={ref} scale={scale}>
+            <mesh geometry={nodes[`pCube2_lambert2_0${idx}`].geometry} material={materials['lambert2']}  />
+            <mesh geometry={nodes[`pCube2_lambert3_0${idx}`].geometry} material={materials['lambert3']}  />
+          </group>
+        ))
+			case "/love-pump.glb" : 
+				return ['', '001', '002'].map(idx => (
+					<group key={idx} ref={ref} scale={scale}>
+						<mesh geometry={nodes[`BASE_HEART_Material_#41_0${idx}`].geometry} material={materials['Material_41']}  />
+					</group>
+				))
+			case "/stars.glb":
+				return ['', '001', '002'].map(idx => (
+          <group key={idx} ref={ref} scale={scale}>
+            <mesh geometry={nodes[`Star_Gold_0${idx}`].geometry} material={materials['Gold']}  />
+          </group>
+        ))
+			case "/robot.glb":
+				return ['', '001', '002'].map(idx => (
+          <group key={idx} ref={ref} scale={scale}>
             {
               nodes[`GLTF_SceneRootNode${idx}`].children.map((gsr: THREE.Object3D, idxn: number) => (
                 <group
@@ -76,25 +109,65 @@ function Robot({ index, z, speed } : any) {
               ))
             }</group>
         ))
-      }
+			default: 
+				return [1,2,3].map(idx => (
+					<mesh key={idx} material-emissive={`#${idx}${idx}${idx}`} />
+				))
+    }
+  }
+
+  // Using drei's detailed is a nice trick to reduce the vertex count because
+  // we don't need high resolution for objects in the distance. The model contains 3 decimated meshes ...
+  return (
+		// @ts-ignore
+    <Detailed ref={ref} distances={[0, 65, 80]}>
+			<RenderNodes/>
     </Detailed>
   )
 }
 
-export default function Robots({ speed = 1, count = 60, depth = 80, easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
+interface iLayoutProps {
+	GLTFSrc : string
+	speed : number
+	color : string
+	scale : number
+}
+
+export default function Layout( props : iLayoutProps ) {
+
+	const{
+		GLTFSrc,
+		speed,
+		color,
+		scale,
+	} = props
+
+	const  
+	count = 80, 
+	depth = 80, 
+	easing = (x : number) => Math.sqrt(1 - Math.pow(x - 1, 2))
   return (
     // No need for antialias (faster), dpr clamps the resolution to 1.5 (also faster than full resolution)
-    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 1, far: depth + 15 }}>
+    <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.01, far: depth + 15 }}>
 
       <Perf position="bottom-left"/>
-      <color attach="background" args={['#97c7a4']} />
+      <color attach="background" args={[color]} />
       <spotLight position={[10, 20, 10]} penumbra={1} intensity={3} color="orange" />
-      {/* Using cubic easing here to spread out objects a little more interestingly, i wanted a sole big object up front ... */}
-      {Array.from({ length: count }, (_, i) => <Robot key={i} index={i} z={Math.round(easing(i / count) * depth)} speed={speed} /> /* prettier-ignore */)}
+      
+			{/* Using cubic easing here to spread out objects a little more interestingly, i wanted a sole big object up front ... */}
+      {Array.from({ length: count }, (_, i) => <Renderer 
+				key={i} 
+				index={i} 
+				z={Math.round(easing(i / count) * depth)} 
+				speed={speed} 
+				scale={scale}
+				GLTFSrc={GLTFSrc}
+			/> )}
+
       <Environment preset="sunset" />
       {/* Multisampling (MSAA) is WebGL2 antialeasing, we don't need it (faster) */}
       <EffectComposer multisampling={0}>
-        <DepthOfField target={[0, 0, 60]} focalLength={0.4} bokehScale={7} height={700} />
+        <DepthOfField target={[0, 0, 60]} focalLength={0.4} bokehScale={14} height={700} />
       </EffectComposer>
     </Canvas>
   )
