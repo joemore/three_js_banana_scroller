@@ -8,6 +8,7 @@ import Astronauts from './inc/Astronaut'
 import Loves from './inc/Love'
 import Stars from './inc/Stars'
 import Skulls from './inc/Skulls'
+import Bullets from './inc/Bullet'
 
 export interface componentOverlayProps {
   name : string
@@ -36,6 +37,8 @@ export function Floating3D( props : componentOverlayProps) {
         return <Stars />
       case 'skull':
         return <Skulls />
+      case 'bullet':
+        return <Bullets />
       default:
         return <Bananas />
     }
